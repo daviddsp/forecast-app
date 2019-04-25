@@ -58,15 +58,14 @@ module.exports = {
 
         const locations = req.param('coordinates')
 
-        const result = []
+        const arrayPromise = []
 
         for (const location of locations) {
-            
-            const resultPromise = await Promise.all([
-                findForecast(location.lat, location.lng)
-            ])
-            result.push(resultPromise)
+            const resultPromise = findForecast(location.lat, location.lng)
+            arrayPromise.push(resultPromise)
         }
+
+        const  result = await Promise.all(arrayPromise)
 
         res.status(200).json({ data: result  })
     },
