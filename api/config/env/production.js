@@ -147,11 +147,11 @@ module.exports = {
     * > Be sure to use the right protocol!  ("http://" vs. "https://")         *
     *                                                                          *
     ***************************************************************************/
-    // cors: {
-    //   // allowOrigins: [
-    //   //   'https://example.com',
-    //   // ]
-    // },
+    cors: {
+      // allowOrigins: [
+      //   '*',
+      // ]
+    },
 
   },
 
@@ -250,10 +250,10 @@ module.exports = {
     * > Be sure to use the right protocol!  ("http://" vs. "https://")         *
     *                                                                          *
     ***************************************************************************/
-    // onlyAllowOrigins: [
-    //   'https://example.com',
-    //   'https://staging.example.com',
-    // ],
+    onlyAllowOrigins: [
+      'http://localhost:3000',
+      'http://localhost'      
+    ],
 
 
     /***************************************************************************
@@ -322,7 +322,7 @@ module.exports = {
     * (https://sailsjs.com/config/http)                                        *
     *                                                                          *
     ***************************************************************************/
-    // trustProxy: true,
+    trustProxy: true,
 
   },
 

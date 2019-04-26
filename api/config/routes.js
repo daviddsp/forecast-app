@@ -50,6 +50,7 @@ module.exports.routes = {
   'post /Savemetrics': 'MetricsController.save',
   'post /metrics': 'MetricsController.getMetrics',
   'get /cities': 'MetricsController.getData',
+  'get /test': 'MetricsController.get',
   'get /SaveErrors': 'MetricsController.saveErrors',
   'get /errors': 'MetricsController.getErrors',
 
