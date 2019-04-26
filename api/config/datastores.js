@@ -17,7 +17,7 @@ module.exports.datastores = {
 
   cache: {
     adapter: 'sails-redis',
-    url: 'redis://localhost:6379',
+    url: 'redis://ripley.redis.cache.windows.net:6379',
   
     // Other available low-level options can also be configured here.
     // (see below for more information)

@@ -23,7 +23,9 @@ var pusher = new Pusher({
     encrypted: true
   });
 
-const currentDate = moment().format("YYYY-MM-DD HH:mm:ss");
+const currentDate = moment()
+
+var timeZONE = require('moment-timezone');
 const locations = [
     {
         'city': 'America/Santiago',
@@ -81,74 +83,96 @@ module.exports = {
 
     getMetrics: async (req, res) => {
 
+        const hourNow = moment().format('YYYY:mm:dd HH:mm:ss')
+        
         const locations = [
             {
                 "city": "santiago",
                 "lat": -33.447487,
-                "lng": -70.673676
+                "lng": -70.673676,
+                "time": timeZONE.tz("America/Santiago").format('LTS')
             },
             {
                 "city": "zurich",
                 "lat": 47.36667,
-                "lng": 8.55
+                "lng": 8.55,
+                "time": timeZONE.tz("Europe/Zurich").format('LTS')
             },
             {
                 "city": "auckland",
                 "lat": -36.8484597,
-                "lng": -174.7633315
+                "lng": -174.7633315,
+                "time": timeZONE.tz("Pacific/Auckland").format('LTS')
             },
             {
                 "city": "sydney",
                 "lat": -33.8667,
-                "lng": 151.2
+                "lng": 151.2,
+                "time": timeZONE.tz("Australia/Sydney").format('LTS')
             },
             {
                 "city": "londres",
                 "lat": 51.5073509,
-                "lng": -0.1277583
+                "lng": -0.1277583,
+                "time": timeZONE.tz("America/Santiago").format('LTS')
             },
             {
                 "city": "georgia",
                 "lat": 42.3154068,
-                "lng": 43.3568916
+                "lng": 43.3568916,
+                "time": timeZONE.tz("Atlantic/South_Georgia").format('LTS')
             }
         ]
 
         let count = 0
-
         const value = setInterval(async function crecer(){
 
             const arrayPromise = []
 
-        for (const location of locations) {
-            const resultPromise = findForecast(location.lat, location.lng)
-            arrayPromise.push(resultPromise)
-        }
+            for (const location of locations) {
+                const resultPromise = findForecast(location.lat, location.lng, location.time)
+                arrayPromise.push(resultPromise)
+            }
 
-        const result = await Promise.all(arrayPromise)
+            const result = await Promise.all(arrayPromise)
 
-        const saveRedis = []
+            const saveRedis = []
 
-        for (const data of result) {
-            saveRedis.push({
-                lat: data.latitude,
-                lng: data.longitude,
-                timezone: data.timezone,
-                time: data.currently.time
-            })
-        }
+            for (const data of result) {
+                saveRedis.push({
+                    lat: data.data.latitude,
+                    lng: data.data.longitude,
+                    timezone: data.data.timezone,
+                    time: data.time,
+                    temperature: data.data.currently.temperature
+                })
+            }
+            const SaveCities = client.HMSET("cities", 'santiago','{"city":"santiago","lat": -33.447487,"lng":-70.673676}', 'zurich','{"city":"zurich","lat": 47.3666700, "lng":8.5500000}', 'auckland','{"city":"auckland","lat": -36.8484597, "lng":-174.7633315}', 'sydney','{"city":"sydney","lat": -33.8667, "lng":151.2}', 'londres','{"city":"londres","lat": 51.5073509, "lng":-0.1277583}', 'georgia','{"city":"georgia","lat": 42.3154068, "lng":43.3568916}');
 
-        pusher.trigger('my-channel', 'update', { data: saveRedis });
+            const saveForecast = client.HMSET('conditions', 'cities',`${JSON.stringify(saveRedis)}`);
 
 
-        // res.status(200).json({ data: saveRedis  })
+            client.hgetall("conditions", function (err, obj) {
 
-            console.log(`Actualización nª${count}`);
-            
+                console.log('Conditions redis',obj);
+                
+                const conditions = []
+
+                for (const key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        const element = obj[key];
+                        conditions.push(JSON.parse(element))       
+                    }
+                }        
+                
+                pusher.trigger('my-channel', 'update', { data: conditions[0] });
+                
+            });
+            console.log(`Actualización nª${count}`);                
             count++; 
         }, 10000)
 
-        return res.status(200).json({ data: {"msj": "SE actualizo con exito"} })
+        return res.status(200).json({ data: {"msj": "se actualizo con exito"} })
         
     },
 
@@ -180,29 +204,51 @@ module.exports = {
     }
 };
 
-
-const interval = async () => {
-    const value = setInterval(findForecast(), 10000)
-}
-
 /**
- * Brings the forecast of a certain latitude and longitude
+ * Devuelve el tiempo de una lat,lng establecida
  * @param {*} lat 
  * @param {*} lng 
  */
-const findForecast = async (lat, lng) => {
+const findForecast = async (lat, lng, time) => {
 
-    const now = moment().unix()
-    console.log(now);
-    
-    console.log("entro");
-    const resultForecast = await axios.get(`${forecastAPI}/${lat},${lng},${now}?lang=es`)
+    try {
 
-    if (Math.random(0, 1) < 0.1) throw new Error('How unfortunate! The API Request Failed')
+        const err = await ProbabilidadError()
+        
+        if (!err){
+            const resultForecast = await axios.get(`${forecastAPI}/${lat},${lng}?lang=es`)
 
-    console.log("salio");
-    return resultForecast.data
-    
+            let result =  []
+            result.push({
+                data: resultForecast.data,
+                time: time
+            })
+
+            return result[0]
+        }
+        console.log("salio");
+
+    } catch (error) {
+        console.log(error);
+        
+    }
+
+}
+/**
+ * Function que retorna la probabilidad de un error
+ */
+const ProbabilidadError = () =>{
+	let err = true;
+    do{
+        if (Math.random(0,1) < 0.1){
+            const saveErrors = client.HMSET(errorsIndex, currentDate,`{"value":"'How unfortunate! The API Request Failed'"}`);
+            console.log("entro en el error & se guardo en redis");
+        }else{
+            console.log("realiza la consulta a la api");
+            err = false
+            return false
+        }
+    }while(err == false)
 }
 
 

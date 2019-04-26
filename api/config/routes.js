@@ -53,6 +53,7 @@ module.exports.routes = {
   'get /test': 'MetricsController.get',
   'get /SaveErrors': 'MetricsController.saveErrors',
   'get /errors': 'MetricsController.getErrors',
+  'get /hours': 'MetricsController.hours'
 
 
 
