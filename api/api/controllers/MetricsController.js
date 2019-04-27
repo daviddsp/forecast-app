@@ -250,5 +250,3 @@ const ProbabilidadError = () =>{
         }
     }while(err == false)
 }
-
-
