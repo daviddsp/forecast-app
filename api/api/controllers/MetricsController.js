@@ -40,12 +40,21 @@ const locations = [
     }
 ]
 
+const initialData = ()=> {
+
+    
+    const SaveCities = client.HMSET("cities", 'santiago','{"city":"santiago","lat": -33.447487,"lng":-70.673676,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'zurich','{"city":"zurich","lat": 47.3666700, "lng":8.5500000,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'auckland','{"city":"auckland","lat": -36.8484597, "lng":-174.7633315,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'sydney','{"city":"sydney","lat": -33.8667, "lng":151.2,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'londres','{"city":"londres","lat": 51.5073509, "lng":-0.1277583,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'georgia','{"city":"georgia","lat": 42.3154068, "lng":43.3568916,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}');
+
+    return ({
+        "msj": "save"
+    })
+}
+
 
 module.exports = {
 
     save: async (req, res) => {
-
-        const SaveCities = client.HMSET("cities", 'santiago','{"city":"santiago","lat": -33.447487,"lng":-70.673676}', 'zurich','{"city":"zurich","lat": 47.3666700, "lng":8.5500000}', 'auckland','{"city":"auckland","lat": -36.8484597, "lng":-174.7633315}', 'sydney','{"city":"sydney","lat": -33.8667, "lng":151.2}', 'londres','{"city":"londres","lat": 51.5073509, "lng":-0.1277583}', 'georgia','{"city":"georgia","lat": 42.3154068, "lng":43.3568916}');
+        const SaveCities = client.HMSET("cities", 'santiago','{"city":"santiago","lat": -33.447487,"lng":-70.673676,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'zurich','{"city":"zurich","lat": 47.3666700, "lng":8.5500000,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'auckland','{"city":"auckland","lat": -36.8484597, "lng":-174.7633315,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'sydney','{"city":"sydney","lat": -33.8667, "lng":151.2,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'londres','{"city":"londres","lat": 51.5073509, "lng":-0.1277583,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'georgia','{"city":"georgia","lat": 42.3154068, "lng":43.3568916,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}');
 
         return res.status(200).json({
             "msj": "save"
@@ -69,6 +78,9 @@ module.exports = {
     },
 
     getData: async (req, res) => {
+
+        // const initial = initialData
+
         client.hgetall("cities", function (err, obj) {
             const cities = []
 
@@ -223,7 +235,7 @@ const findForecast = async (lat, lng, time) => {
         
         if (!err){
             const resultForecast = await axios.get(`${forecastAPI}/${forecastKey}/${lat},${lng}?lang=es`)
-            
+
             let result =  []
             result.push({
                 data: resultForecast.data,
