@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    build: ./frontend/
+    ports:
+     - "3000:3000"     
+    networks:
+      - backend     
+    depends_on:
+      - back
+
+  back:
+    build: ./api/
+    ports:
+      - 8080:80
+    networks:
+      - backend
+    
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - backend      
+networks:
+  backend:    
+    driver: "bridge"
