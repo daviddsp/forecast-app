@@ -10,7 +10,7 @@
  */
 
 module.exports.bootstrap = async function(done) {
-  const client = RedisService.prepareConnect().createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
+  const client = RedisService.prepareConnect().createClient(6379, process.env.REDIS_IP);
   client.on('connect',function(){
       sails.log.debug('Redis connected');
       client.select(process.env.REDIS_DB);
