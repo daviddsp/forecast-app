@@ -40,7 +40,7 @@ export default class TimeCard extends React.Component {
       let count = 0; 
       setInterval(async function crecer() { 
 
-        const response = await fetch('http://localhost:1337/metrics', {
+        const response = await fetch('http://40.121.92.151:8080/metrics', {
           method: 'POST', // or 'PUT'
           body: '', // data can be `string` or {object}!
           headers:{
@@ -55,7 +55,7 @@ export default class TimeCard extends React.Component {
     var p = new getData();
   }
   getAllForecast = async () => {
-    const response  = await fetch('http://localhost:1337/cities')
+    const response  = await fetch('http://40.121.92.151:8080/cities')
     const data = await response.json()
     this.setState({
       forecastApi: data
