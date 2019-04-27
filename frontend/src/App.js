@@ -1,17 +1,17 @@
 import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
-// import {Button, Alert} from 'react-bootstrap';
+import {Jumbotron, Container} from 'react-bootstrap';
 import TimeCard from './components/card'
-
-// or less ideally
-// import { Button } from 'react-bootstrap';
-
 function App() {
   return (
     <div>
-      <h1>Listado de Ciudades</h1>
-      <TimeCard/>
+      <Jumbotron style={{ textAlign:'center' }}>
+        <h1>Listado de ciudades del mundo</h1>
+      </Jumbotron>
+      <Container>
+        <TimeCard/>
+      </Container>
     </div>
   );
 }
