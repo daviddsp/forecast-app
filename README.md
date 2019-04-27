@@ -25,6 +25,10 @@ $ docker-compose up
 - Node
 - Azure
 
+# Mejoras
+
+- Se aplicará un limite de peticiones, para que de esta forma no colapse el servidor, se fíjara un total de 10 cada 10 seg.
+
 
 License
 ----
