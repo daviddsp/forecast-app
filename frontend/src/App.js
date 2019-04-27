@@ -10,6 +10,7 @@ import TimeCard from './components/card'
 function App() {
   return (
     <div>
+      <h1>Listado de Ciudades</h1>
       <TimeCard/>
     </div>
   );
