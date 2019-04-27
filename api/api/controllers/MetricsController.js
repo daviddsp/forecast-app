@@ -8,6 +8,7 @@
 require('dotenv').config()
 const axios = require('axios')
 const forecastAPI = process.env.API_FORECAST
+const forecastKey = process.env.FORECAST_KEY
 var moment = require('moment');
 var errorsIndex = "api.errors";
 
@@ -124,8 +125,7 @@ module.exports = {
             }
         ]
 
-        let count = 0
-        const value = setInterval(async function crecer(){
+        
 
             const arrayPromise = []
 
@@ -139,6 +139,9 @@ module.exports = {
             const saveRedis = []
 
             for (const data of result) {
+
+                // console.log('time',data.time);
+                
                 saveRedis.push({
                     lat: data.data.latitude,
                     lng: data.data.longitude,
@@ -147,14 +150,18 @@ module.exports = {
                     temperature: data.data.currently.temperature
                 })
             }
-            const SaveCities = client.HMSET("cities", 'santiago','{"city":"santiago","lat": -33.447487,"lng":-70.673676}', 'zurich','{"city":"zurich","lat": 47.3666700, "lng":8.5500000}', 'auckland','{"city":"auckland","lat": -36.8484597, "lng":-174.7633315}', 'sydney','{"city":"sydney","lat": -33.8667, "lng":151.2}', 'londres','{"city":"londres","lat": 51.5073509, "lng":-0.1277583}', 'georgia','{"city":"georgia","lat": 42.3154068, "lng":43.3568916}');
+
+            // console.log(saveRedis);
+            
+            
+            // const SaveCities = client.HMSET("cities", 'santiago','{"city":"santiago","lat": -33.447487,"lng":-70.673676}', 'zurich','{"city":"zurich","lat": 47.3666700, "lng":8.5500000}', 'auckland','{"city":"auckland","lat": -36.8484597, "lng":-174.7633315}', 'sydney','{"city":"sydney","lat": -33.8667, "lng":151.2}', 'londres','{"city":"londres","lat": 51.5073509, "lng":-0.1277583}', 'georgia','{"city":"georgia","lat": 42.3154068, "lng":43.3568916}');
 
             const saveForecast = client.HMSET('conditions', 'cities',`${JSON.stringify(saveRedis)}`);
 
 
             client.hgetall("conditions", function (err, obj) {
 
-                console.log('Conditions redis',obj);
+                //console.log('Conditions redis',obj);
                 
                 const conditions = []
 
@@ -168,9 +175,8 @@ module.exports = {
                 pusher.trigger('my-channel', 'update', { data: conditions[0] });
                 
             });
-            console.log(`Actualización nª${count}`);                
-            count++; 
-        }, 10000)
+            // 6console.log(`Actualización nª${count}`);                
+            
 
         return res.status(200).json({ data: {"msj": "se actualizo con exito"} })
         
@@ -216,8 +222,8 @@ const findForecast = async (lat, lng, time) => {
         const err = await ProbabilidadError()
         
         if (!err){
-            const resultForecast = await axios.get(`${forecastAPI}/${lat},${lng}?lang=es`)
-
+            const resultForecast = await axios.get(`${forecastAPI}/${forecastKey}/${lat},${lng}?lang=es`)
+            
             let result =  []
             result.push({
                 data: resultForecast.data,
@@ -238,7 +244,11 @@ const findForecast = async (lat, lng, time) => {
  * Function que retorna la probabilidad de un error
  */
 const ProbabilidadError = () =>{
-	let err = true;
+    let err = true;
+    
+    for(let i = 0; i>100;i ++){
+
+    }
     do{
         if (Math.random(0,1) < 0.1){
             const saveErrors = client.HMSET(errorsIndex, currentDate,`{"value":"'How unfortunate! The API Request Failed'"}`);
