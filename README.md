@@ -11,7 +11,7 @@ $ cd forecast-app
 $ docker-compose up
 ```
 
-Para visualizar el front debes [ingresar]( http://localhost:3000 )
+Para visualizar el front [ingresar]( http://localhost:3000 )
 
 
 License
