@@ -12,8 +12,8 @@ $ cd forecast-app
 $ docker-compose up
 ```
 
-Para visualizar el front en local [ingresa]( http://localhost:3000 )
-Vista Previa [ingresa]( http://40.121.92.151:3000 )
+- Para visualizar el front en local [ingresa]( http://localhost:3000 )
+- Vista Previa [ingresa]( http://40.121.92.151:3000 )
 
 # Tecnologías usadas
 - docker
@@ -23,6 +23,7 @@ Vista Previa [ingresa]( http://40.121.92.151:3000 )
 - react
 - websocket
 - Node
+- Azure
 
 
 License
