@@ -27,8 +27,9 @@ $ docker-compose up
 
 # Mejoras
 
-- Se aplicará un limite de peticiones, para que de esta forma no colapse el servidor, se fíjara un total de 10 cada 10 seg.
-
+- Mejorar el diseño a nivel UX/UI
+- Agregar foto de la ciudad
+- Agregar icono de temperatura y reloj
 
 License
 ----
