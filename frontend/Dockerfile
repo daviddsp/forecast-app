@@ -1,8 +1,8 @@
 FROM node:slim
 
-WORKDIR /api_forecast
+WORKDIR /front
 
-COPY . /api_forecast
+COPY . /front
 RUN npm install
 
 EXPOSE 3000
