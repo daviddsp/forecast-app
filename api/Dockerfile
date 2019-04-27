@@ -5,5 +5,5 @@ WORKDIR /api_forecast
 COPY . /api_forecast
 RUN npm install
 
-EXPOSE 80
+EXPOSE 8080
 CMD ["npm", "start"]
