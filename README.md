@@ -4,6 +4,7 @@ La siguiente aplicación esta desarrolla en react + sailsJS, para correrlo en lo
 
 # ¡Dependencias necesarias!
 - docker [Instalación](https://docs.docker.com/install/)
+- docker-compose [Instalación] (https://docs.docker.com/compose/install/)
 
 ```sh
 $ git clone git@github.com:daviddsp/forecast-app.git
