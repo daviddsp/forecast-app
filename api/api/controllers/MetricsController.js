@@ -17,11 +17,11 @@ client = redis.createClient();
 
 var Pusher = require('pusher');
 var pusher = new Pusher({
-    appId: '770454',
-    key: '51c956b278062347002d',
-    secret: '5b111b0c9903da3bd75c',
-    cluster: 'us2',
-    encrypted: true
+    appId: process.env.PUSHER_APP_ID,
+    key: process.env.PUSHER_APP_KEY,
+    secret: process.env.PUSHER_APP_SECRET,
+    cluster: process.env.PUSHER_APP_CLUSTER,
+    encrypted: process.env.PUSHER_APP_ENCRYTED
   });
 
 const currentDate = moment()
@@ -42,7 +42,7 @@ const locations = [
 
 const initialData = ()=> {
 
-    
+
     const SaveCities = client.HMSET("cities", 'santiago','{"city":"santiago","lat": -33.447487,"lng":-70.673676,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'zurich','{"city":"zurich","lat": 47.3666700, "lng":8.5500000,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'auckland','{"city":"auckland","lat": -36.8484597, "lng":-174.7633315,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'sydney','{"city":"sydney","lat": -33.8667, "lng":151.2,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'londres','{"city":"londres","lat": 51.5073509, "lng":-0.1277583,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}', 'georgia','{"city":"georgia","lat": 42.3154068, "lng":43.3568916,"timezone": "sin datos", "time": "sin datos", "temperature": "sin datos"}');
 
     return ({
