@@ -13,7 +13,7 @@ $ docker-compose up
 ```
 
 - Para visualizar el front en local [ingresa]( http://localhost:3000 )
-- Vista Previa [ingresa]( http://40.121.92.151:3000 )
+- Vista Previa [ingresa]( http://54.188.118.170:3000 )
 
 # Tecnologías usadas
 - docker
